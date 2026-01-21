@@ -15,6 +15,9 @@ export class CoreController {
             
         }
     
-    
+        @Get('db-status')
+        dbStatus() {
+          return this.coreservice.dbStatus();
+        }
 
 }
