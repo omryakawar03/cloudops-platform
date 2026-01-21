@@ -3,37 +3,39 @@
 
     WORKDIR /app
     
-    # Enable pnpm via corepack
     RUN corepack enable
     
-    # Copy dependency files
     COPY package.json pnpm-lock.yaml ./
-    
-    # Deterministic install
     RUN pnpm install --frozen-lockfile
     
-    # Copy source code
     COPY . .
     
-    # Build Next.js app (standalone output)
     RUN pnpm run build
     
     
     # ---------------- RUNTIME STAGE ----------------
-    FROM nginx:alpine
+    FROM node:20-alpine
     
-    # Remove default nginx config
-    RUN rm /etc/nginx/conf.d/default.conf
+    WORKDIR /app
+    ENV NODE_ENV=production
     
-    # Copy custom nginx config
-    COPY nginx.conf /etc/nginx/conf.d/default.conf
+    # Install nginx
+    RUN apk add --no-cache nginx
     
-    # Copy Next.js standalone build
-    COPY --from=builder /app/.next/standalone /app
-    COPY --from=builder /app/.next/static /app/.next/static
-    COPY --from=builder /app/public /app/public
+    # Create nginx folders
+    RUN mkdir -p /run/nginx
     
-    EXPOSE 80
+    # Copy nginx config
+    COPY nginx.conf /etc/nginx/http.d/default.conf
     
-    CMD ["nginx", "-g", "daemon off;"]
+    # Copy Next.js standalone output
+    COPY --from=builder /app/.next/standalone ./
+    COPY --from=builder /app/.next/static ./.next/static
+    COPY --from=builder /app/public ./public
+    
+    # Expose ports
+    EXPOSE 80 3000
+    
+    # Start both Node (Next.js) and NGINX
+    CMD sh -c "node server.js & nginx -g 'daemon off;'"
     
