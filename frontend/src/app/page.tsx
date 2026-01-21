@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 const BACKEND =
-  process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001';
+  process.env.NEXT_PUBLIC_BACKEND_URL ;
 
 export default function Home() {
   const [health, setHealth] = useState('unknown');
