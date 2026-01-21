@@ -3,11 +3,21 @@
 
     WORKDIR /app
     
-    COPY package.json package-lock.json ./
-    RUN npm ci
+    # Enable pnpm via corepack
+    RUN corepack enable
     
+    # Copy dependency files
+    COPY package.json pnpm-lock.yaml ./
+    
+    # Deterministic install
+    RUN pnpm install --frozen-lockfile
+    
+    # Copy source code
     COPY . .
-    RUN npm run build
+    
+    # Build Next.js app (standalone output)
+    RUN pnpm run build
+    
     
     # ---------------- RUNTIME STAGE ----------------
     FROM nginx:alpine
@@ -15,7 +25,7 @@
     # Remove default nginx config
     RUN rm /etc/nginx/conf.d/default.conf
     
-    # Custom nginx config
+    # Copy custom nginx config
     COPY nginx.conf /etc/nginx/conf.d/default.conf
     
     # Copy Next.js standalone build
@@ -24,4 +34,6 @@
     COPY --from=builder /app/public /app/public
     
     EXPOSE 80
+    
     CMD ["nginx", "-g", "daemon off;"]
+    
