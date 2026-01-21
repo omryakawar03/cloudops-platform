@@ -4,24 +4,30 @@ services:
   mongo:
     image: mongo:7
     container_name: mongo
-    ports:
-      - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    ports:
+      - "27017:27017"
 
   backend:
-    image: cloudops-backend
+    image: omryakawar/cloudops-backend:latest
+    container_name: cloudops-backend
     ports:
       - "3001:3001"
     environment:
+      - PORT=3001
+      - APP_ENV=prod
+      - APP_NAME=cloudops-platform
+      - APP_VERSION=1.0.0
       - MONGO_URI=mongodb://mongo:27017/cloudops
     depends_on:
       - mongo
 
   frontend:
-    image: cloudops-frontend
+    image: omryakawar/cloudops-frontend:latest
+    container_name: cloudops-frontend
     ports:
-      - "3000:80"
+      - "80:80"
     environment:
       - NEXT_PUBLIC_BACKEND_URL=http://backend:3001
     depends_on:
