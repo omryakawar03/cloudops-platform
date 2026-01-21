@@ -269,7 +269,7 @@ docker compose up
 - Prometheus & Grafana integration
 ---
 ## 👤 Author
-** Omkar Ryakawar **
+**Omkar Ryakawar**
 - Focused on AWS DevOps, Cloud Infrastructure, CI/CD, and Production Systems
 ---
 ##  Why This Project Matters
@@ -285,4 +285,4 @@ docker compose up
 
 - DevOps and SRE best practices
 
-This is not a CRUD demo, but a ** cloud operations platform **.
+This is not a CRUD demo, but a **cloud operations platform**.
