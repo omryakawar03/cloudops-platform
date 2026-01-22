@@ -2,9 +2,18 @@ terraform {
   required_version = ">= 1.5.0"
 
   required_providers {
-    aws        = { source = "hashicorp/aws" }
-    kubernetes = { source = "hashicorp/kubernetes" }
-    helm       = { source = "hashicorp/helm" }
+       aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.30"   
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.25"
+    }
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.13"
+    }
   }
 }
 
@@ -37,6 +46,6 @@ module "addons" {
 # ---------- WORKLOADS ----------
 module "workloads" {
   source            = "./modules/workloads"
-  cluster_name      = module.eks.cluster_name
+ 
   depends_on        = [module.addons]
 }
