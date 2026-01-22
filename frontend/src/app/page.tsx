@@ -92,27 +92,116 @@ export default function Home() {
       <div className="w-full max-w-lg bg-gray-500 rounded-xl shadow-lg p-8 space-y-6">
         <h1 className="text-2xl font-semibold text-center">CloudOps Platform</h1>
 
-        <section className="flex flex-col items-center">
-          <p>Backend: {health}</p>
-          <p>Database: {dbStatus}</p>
+     <section className="space-y-1 flex flex-col items-center">
+        <h2 className="font-medium">System Status</h2>
+        <p>
+      Backend:{' '}
+      <span className={health === 'Healthy' ? 'text-green-500' : health === 'Down' ? 'text-red-500' : ''}>{health}</span>
+    </p>
+    <p>
+      Database:{' '}
+      <span className={dbStatus === 'connected' ? 'text-green-500' : dbStatus === 'disconnected' ? 'text-red-500' : ''}>{dbStatus}</span>
+    </p>
+    <button
+      onClick={() => {
+        loadHealth();
+        loadDbStatus();
+      }}
+      className="mt-2 px-3 py-1 text-sm bg-blue-600 rounded hover:bg-blue-700"
+    >
+      Recheck
+    </button>
         </section>
 
-        <section>
-          <input value={name} onChange={e => setName(e.target.value)} />
-          <button onClick={addUser}>Add</button>
+        <hr />
 
-          {users.map(u => (
-            <div key={u._id}>
-              {u.name}
-              <button onClick={() => deleteUser(u._id)}>Delete</button>
+{/* USERS CRUD */}
+<section className="space-y-3 flex flex-col items-center">
+  <h2 className="font-medium">Users Service</h2>
+
+  <div className="flex gap-2">
+    <input
+      className="flex-1 border rounded px-2 py-1"
+      placeholder="User name"
+      value={name}
+      onChange={e => setName(e.target.value)}
+    />
+    <button
+      onClick={addUser}
+      className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+    >
+      Add
+    </button>
+  </div>
+
+  <ul className="space-y-2">
+    {users.map(user => (
+      <li
+        key={user._id}
+        className="flex items-center border  rounded  p-1 justify-around "
+      > User Added =&gt; 
+        {editingId === user._id ? (
+          <div className="flex gap-2 w-full">
+            <input
+              className="flex-1 border rounded px-2 py-1"
+              value={editingName}
+              onChange={e => setEditingName(e.target.value)}
+            />
+            <button
+              onClick={updateUser}
+              className="px-2 bg-green-600 text-white rounded"
+            >
+              Save
+            </button>
+            <button
+              onClick={() => setEditingId(null)}
+              className="px-2 bg-blue-600 rounded"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <>
+            <span>{user.name}</span>
+            <div className="flex gap-2">
+              <button
+                onClick={() => startEdit(user)}
+                className="px-2 bg-green-600 text-white rounded text-sm"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => deleteUser(user._id)}
+                className="px-2 bg-red-600 text-white rounded text-sm"
+              >
+                Delete
+              </button>
             </div>
-          ))}
-        </section>
+          </>
+        )}
+      </li>
+    ))}
+  </ul>
+</section>
 
-        <section>
-          <button onClick={toggleAppInfo}>App Info</button>
-          {showAppInfo && <pre>{JSON.stringify(appInfo, null, 2)}</pre>}
-        </section>
+<hr />
+
+{/* APP INFO */}
+<section className="space-y-2 flex flex-col items-center">
+  <h2 className="font-medium">Application Info</h2>
+  <button
+    onClick={toggleAppInfo}
+    className="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700"
+  >
+    {showAppInfo ? 'Hide Info' : 'Show Info'}
+  </button>
+
+  {showAppInfo && appInfo && (
+    <pre className="bg-black p-3 rounded text-xs text-green-400 overflow-x-auto">
+      {JSON.stringify(appInfo, null, 2)}
+    </pre>
+  )}
+</section>
       </div>
     </main>
   );
