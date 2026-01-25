@@ -1,51 +1,39 @@
-terraform {
-  required_version = ">= 1.5.0"
-
-  required_providers {
-       aws = {
-      source  = "hashicorp/aws"
-      version = "~> 5.30"   
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "~> 2.25"
-    }
-    helm = {
-      source  = "hashicorp/helm"
-      version = "~> 2.13"
-    }
-  }
-}
-
-# ---------- VPC ----------
 module "vpc" {
-  source   = "./modules/vpc"
+  source = "./modules/vpc"
+
   vpc_cidr = var.vpc_cidr
-  region   = var.aws_region
+  vpc_name = "cloudops-vpc"
+
+  azs = var.azs
+
+  public_subnets  = var.public_subnets
+  private_subnets = var.private_subnets
+
+  enable_nat_gateway = true
+  single_nat_gateway = true
 }
 
-# ---------- EKS ----------
 module "eks" {
-  source          = "./modules/eks"
+  source = "./modules/eks"
+
   cluster_name    = var.cluster_name
+  cluster_version = var.cluster_version
+
   vpc_id          = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnets
-  region          = var.aws_region
+
+  node_instance_types = var.node_instance_types
+  node_min_size       = var.node_min_size
+  node_max_size       = var.node_max_size
+  node_desired_size   = var.node_desired_size
 }
 
-# ---------- ADDONS ----------
 module "addons" {
-  source             = "./modules/addons"
-  cluster_name       = module.eks.cluster_name
-  cluster_endpoint   = module.eks.cluster_endpoint
-  cluster_ca         = module.eks.cluster_ca
-  oidc_provider_arn  = module.eks.oidc_provider_arn
-  region             = var.aws_region
-}
+  source = "./modules/addons"
 
-# ---------- WORKLOADS ----------
-module "workloads" {
-  source            = "./modules/workloads"
- 
-  depends_on        = [module.addons]
+  cluster_name = var.cluster_name
+
+  depends_on = [
+    module.eks
+  ]
 }

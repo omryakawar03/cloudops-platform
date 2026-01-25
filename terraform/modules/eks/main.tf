@@ -3,13 +3,19 @@ module "eks" {
   version = "20.8.4"
 
   cluster_name    = var.cluster_name
-  cluster_version = "1.29"
+  cluster_version = var.cluster_version
 
   vpc_id     = var.vpc_id
   subnet_ids = var.private_subnets
-   region = var.region
+
   enable_irsa = true
-  tags = {
-    Project = "cloudops"
+
+  eks_managed_node_groups = {
+    default = {
+      instance_types = var.node_instance_types
+      min_size       = var.node_min_size
+      max_size       = var.node_max_size
+      desired_size   = var.node_desired_size
+    }
   }
 }
