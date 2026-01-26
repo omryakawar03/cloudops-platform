@@ -1,4 +1,4 @@
-resource "helm_release" "alb" {
+resource "helm_release" "alb_controller" {
   name       = "aws-load-balancer-controller"
   namespace  = "kube-system"
   repository = "https://aws.github.io/eks-charts"
