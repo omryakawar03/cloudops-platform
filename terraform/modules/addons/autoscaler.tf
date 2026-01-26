@@ -4,8 +4,18 @@ resource "helm_release" "autoscaler" {
   repository = "https://kubernetes.github.io/autoscaler"
   chart      = "cluster-autoscaler"
 
-  set = {
-    name  = "autoDiscovery.clusterName"
-    value = var.cluster_name
-  }
+  set = [
+    {
+      name  = "autoDiscovery.clusterName"
+      value = var.cluster_name
+    },
+    {
+      name  = "rbac.serviceAccount.create"
+      value = "false"
+    },
+    {
+      name  = "rbac.serviceAccount.name"
+      value = "cluster-autoscaler"
+    }
+  ]
 }
