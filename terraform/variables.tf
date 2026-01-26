@@ -42,7 +42,11 @@ variable "cluster_name" {
   type        = string
 }
 
-
+variable "cluster_version" {
+  description = "EKS k8s version"
+  type = string
+  
+}
 
 # -----------------------
 # EKS Node Group

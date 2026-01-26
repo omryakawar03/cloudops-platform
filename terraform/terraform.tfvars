@@ -28,7 +28,7 @@ private_subnets = [
 # EKS
 # -----------------------
 cluster_name    = "cloudops-eks"
-
+cluster_version = "1.31"
 
 # -----------------------
 # EKS Node Group
