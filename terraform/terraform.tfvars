@@ -28,15 +28,15 @@ private_subnets = [
 # EKS
 # -----------------------
 cluster_name    = "cloudops-eks"
-cluster_version = "1.32"
+
 
 # -----------------------
 # EKS Node Group
 # -----------------------
-node_instance_types = ["c7i.large"]
+node_instance_types = ["c7i-flex.large"]
 
 node_min_size     = 1
-node_max_size     = 3
+node_max_size     = 2
 node_desired_size = 1
 
 # -----------------------
@@ -45,6 +45,6 @@ node_desired_size = 1
 tags = {
   Project     = "cloudops-platform"
   Environment = "prod"
-  Owner       = "omkar"
+  Owner       = "omkar-ryakawar"
   ManagedBy   = "terraform"
 }

@@ -42,10 +42,7 @@ variable "cluster_name" {
   type        = string
 }
 
-variable "cluster_version" {
-  description = "Kubernetes version for EKS"
-  type        = string
-}
+
 
 # -----------------------
 # EKS Node Group
