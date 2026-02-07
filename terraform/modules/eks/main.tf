@@ -11,14 +11,13 @@ module "eks" {
   enable_irsa = true
 
   eks_managed_node_groups = {
-     cluster_name    = var.cluster_name
-  node_group_name = "Node-cloud"
-  subnet_ids      = var.private_subnets
-      scaling_config ={
-      min_size       = var.node_min_size
-      max_size       = var.node_max_size
-      desired_size   = var.node_desired_size
-    }
+    node_cloud = {
+      min_size     = var.node_min_size
+      max_size     = var.node_max_size
+      desired_size = var.node_desired_size
+
       instance_types = var.node_instance_types
+      subnet_ids     = var.private_subnets
+    }
   }
 }

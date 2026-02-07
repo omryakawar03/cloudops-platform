@@ -28,13 +28,3 @@ module "eks" {
   node_max_size       = var.node_max_size
   node_desired_size   = var.node_desired_size
 }
-
-module "addons" {
-  source = "./modules/addons"
-
-  cluster_name = var.cluster_name
-
-  depends_on = [
-    module.eks
-  ]
-}
