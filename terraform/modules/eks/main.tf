@@ -97,7 +97,7 @@ resource "aws_iam_role_policy_attachment" "AmazonEC2ContainerRegistryReadOnly" {
 # -------------------------
 
 resource "aws_eks_node_group" "cloudops_node_group" {
-  cluster_name    = var.cluster_name
+  cluster_name    = aws_eks_cluster.cloudops_cluster.name
   node_group_name = "Node-cloudops"
   node_role_arn   = aws_iam_role.IAMRoleForNodeGroup.arn
   subnet_ids      = var.public_subnets
