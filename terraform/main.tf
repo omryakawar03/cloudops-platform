@@ -13,16 +13,12 @@ module "vpc" {
   single_nat_gateway = true
 }
 
-module "eks" {
+module "cloudops_cluster" {
   source = "./modules/eks"
-
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
- 
-
-  vpc_id          = module.vpc.vpc_id
-  private_subnets = module.vpc.private_subnets
-
+  vpc_id           = module.vpc.vpc_id
+  public_subnets  = module.vpc.public_subnets
   node_instance_types = var.node_instance_types
   node_min_size       = var.node_min_size
   node_max_size       = var.node_max_size
