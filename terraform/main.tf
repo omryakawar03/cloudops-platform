@@ -18,7 +18,7 @@ module "cloudops_cluster" {
   cluster_name    = var.cluster_name
   cluster_version = var.cluster_version
   vpc_id           = module.vpc.vpc_id
-  public_subnets  = module.vpc.public_subnets
+  private_subnets  = module.vpc.private_subnets
   node_instance_types = var.node_instance_types
   node_min_size       = var.node_min_size
   node_max_size       = var.node_max_size

@@ -43,7 +43,7 @@ resource "aws_eks_cluster" "cloudops_cluster" {
 
   # Attach cluster to VPC subnets
   vpc_config {
-    subnet_ids = var.public_subnets
+    subnet_ids = var.private_subnets
   }
 
   # Ensure IAM Role permissions are created before the cluster
@@ -100,7 +100,7 @@ resource "aws_eks_node_group" "cloudops_node_group" {
   cluster_name    = aws_eks_cluster.cloudops_cluster.name
   node_group_name = "Node-cloudops"
   node_role_arn   = aws_iam_role.IAMRoleForNodeGroup.arn
-  subnet_ids      = var.public_subnets
+  subnet_ids      = var.private_subnets
 
   # Auto-scaling configuration for node group
   scaling_config {
