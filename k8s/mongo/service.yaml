@@ -4,6 +4,7 @@ metadata:
   name: mongo
   namespace: cloudops
 spec:
+  clusterIP: None
   ports:
   - port: 27017
   selector:

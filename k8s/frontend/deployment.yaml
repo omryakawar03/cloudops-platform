@@ -14,3 +14,6 @@ spec:
       containers:
       - name: frontend
         image: omryakawar/cloudops-frontend:latest
+        ports:
+        - containerPort: 3000
+        
