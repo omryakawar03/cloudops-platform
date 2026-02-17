@@ -5,7 +5,7 @@ metadata:
   name: cloudops
   namespace: cloudops
   annotations:
-    kubernetes.io/ingress.class: alb
+    kubernetes.io/ingressClassName: alb
 spec:
   rules:
   - http:
