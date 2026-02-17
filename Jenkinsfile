@@ -18,6 +18,7 @@ pipeline {
 
         stage('Build Frontend Image') {
             steps {
+                echo "frontend"
                 sh """
                 docker build -t $FRONTEND_IMAGE:$IMAGE_TAG ./frontend
                 """
