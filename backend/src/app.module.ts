@@ -6,8 +6,13 @@ import { UsersModule } from './users/users.module';
 import { OpsModule } from './ops/ops.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import {MongooseModule} from '@nestjs/mongoose';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { MetricsModule } from './metrics/metrics.module';
+import { MetricsInterceptor } from './metrics/metrics.interceptor';
+import { LoggingInterceptor } from './common/logging.interceptor';
+
 @Module({
-  imports: [    ConfigModule.forRoot({isGlobal: true, envFilePath: '.env', }),
+  imports: [  MetricsModule,  ConfigModule.forRoot({isGlobal: true, envFilePath: '.env', }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => ({
@@ -18,6 +23,6 @@ import {MongooseModule} from '@nestjs/mongoose';
      UsersModule,
       OpsModule, ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, { provide: APP_INTERCEPTOR, useClass: MetricsInterceptor }, { provide: APP_INTERCEPTOR, useClass: LoggingInterceptor }],
 })
 export class AppModule {}

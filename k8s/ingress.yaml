@@ -1,0 +1,54 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cloudops-ingress
+  namespace: cloudops
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+spec:
+  rules:
+    - http:
+        paths:
+          # Backend APIs
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: cloudops-backend
+                port:
+                  number: 3001
+
+          - path: /core
+            pathType: Prefix
+            backend:
+              service:
+                name: cloudops-backend
+                port:
+                  number: 3001
+
+          - path: /ops
+            pathType: Prefix
+            backend:
+              service:
+                name: cloudops-backend
+                port:
+                  number: 3001
+
+          - path: /metrics
+            pathType: Prefix
+            backend:
+              service:
+                name: cloudops-backend
+                port:
+                  number: 3001
+
+          # Frontend last (important)
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cloudops-frontend
+                port:
+                  number: 80
